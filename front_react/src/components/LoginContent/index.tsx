@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { signIn } from '../../redux/actions/authActions';
 import SocialLink from '../SocialLink';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import './styles.scss';
 export interface LoginContentPageProps {}
 
@@ -15,7 +17,11 @@ const LoginContent: React.FunctionComponent<LoginContentPageProps> = (
 	const [identifier, setIdentifier] = useState('romain-p31@hotmail.fr');
 	const [password, setPassword] = useState('123456');
 	const [errorMessage, setErrorMessage] = useState(false);
+	const [passwordIsVisible, setPasswordIsVisible] = useState(false);
 	const providers = ['facebook', 'github', 'google', 'twitter'];
+	const iconProps = {
+		icon: 'fa-regular fa-eye',
+	};
 
 	const login = async () => {
 		try {
@@ -26,6 +32,9 @@ const LoginContent: React.FunctionComponent<LoginContentPageProps> = (
 		} catch (error) {
 			setErrorMessage(true);
 		}
+	};
+	const showPassword = () => {
+		setPasswordIsVisible(!passwordIsVisible);
 	};
 
 	useEffect(() => {
@@ -64,15 +73,33 @@ const LoginContent: React.FunctionComponent<LoginContentPageProps> = (
 						}}
 					/>
 					<label htmlFor="password">Mot de passe</label>
-					<input
-						type="password"
-						placeholder="************"
-						name="password"
-						value={password}
-						onChange={(e) => {
-							setPassword(e.target.value);
-						}}
-					/>
+					<div>
+						<input
+							className="inputPassword"
+							type={passwordIsVisible ? 'text' : 'password'}
+							placeholder="************"
+							name="password"
+							value={password}
+							onChange={(e) => {
+								setPassword(e.target.value);
+							}}
+						/>
+
+						{passwordIsVisible ? (
+							<FontAwesomeIcon
+								className="visibilityIcon"
+								onClick={showPassword}
+								icon={faEyeSlash}
+							/>
+						) : (
+							<FontAwesomeIcon
+								className="visibilityIcon"
+								onClick={showPassword}
+								icon={faEye}
+							/>
+						)}
+					</div>
+
 					<div>
 						<input
 							type="checkbox"

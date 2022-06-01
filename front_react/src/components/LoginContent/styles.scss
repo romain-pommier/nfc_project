@@ -1,5 +1,5 @@
 hr.divider {
-	border-top: 3px solid #0097f6;
+	border-top: 2px solid #0097f6;
 	border-radius: 5px;
 	background: none;
 	opacity: 1;
@@ -39,6 +39,16 @@ hr.divider {
 	margin: 0 auto;
 	width: 100%;
 	font-size: 20px;
+	.inputPassword {
+		width: 100%;
+		position: relative;
+	}
+	.visibilityIcon {
+		position: absolute;
+		transform: translate(-35px, 3px);
+		padding: 5px;
+		cursor: pointer;
+	}
 	input {
 		margin-bottom: 15px;
 	}
