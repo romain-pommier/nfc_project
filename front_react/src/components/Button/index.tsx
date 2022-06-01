@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
 import cn from 'classnames';
 
-import './styles.css';
+import './styles.scss';
 
 function Button(props: any) {
 	const buttonProps = Object.assign({}, props);
