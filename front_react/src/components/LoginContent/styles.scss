@@ -4,15 +4,17 @@ hr.divider {
 	background: none;
 	opacity: 1;
 	margin: 0 auto 30px auto;
-	max-width: 850px;
+	max-width: 650px;
 	width: 80%;
 }
 .LoginContent {
 	width: 70%;
-	max-width: 650px;
+	max-width: 550px;
 	display: flex;
 	flex-direction: column;
 	margin: 0 auto;
+	padding: 50px;
+	box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 	a {
 		text-align: center;
 	}
@@ -45,7 +47,7 @@ hr.divider {
 	}
 	.visibilityIcon {
 		position: absolute;
-		transform: translate(-35px, 3px);
+		transform: translate(-40px, 3px);
 		padding: 5px;
 		cursor: pointer;
 	}
@@ -57,7 +59,7 @@ hr.divider {
 	border-top: 1px solid black;
 	background: none;
 	width: 100%;
-	margin: 50px auto 20px auto;
+	margin: 30px auto 20px auto;
 }
 a {
 	color: black;

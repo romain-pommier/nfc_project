@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import store from '../../redux/store';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { signIn } from '../../redux/actions/authActions';
+import { signUp } from '../../redux/actions/authActions';
 import SocialLink from '../SocialLink';
-import auth from '../../utils/auth';
 import './styles.scss';
+import auth from '../../utils/auth';
 import {
 	Box,
 	InputAdornment,
@@ -17,24 +17,27 @@ import {
 	FormControlLabel,
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-export interface LoginContentPageProps {}
 
-const LoginContent: React.FunctionComponent<LoginContentPageProps> = (
-	props
-) => {
+const RegisterContent = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch<any>();
+	const [username, setUsername] = useState('');
 	const [identifier, setIdentifier] = useState('');
 	const [password, setPassword] = useState('');
+	const [passwordConfirmed, setPasswordConfirmed] = useState('');
 	const [errorMessage, setErrorMessage] = useState(false);
 	const [passwordIsVisible, setPasswordIsVisible] = useState(false);
+	const [passwordIsIdentical, setPasswordIsIdentical] = useState(false);
+	const [passwordConfirmedIsVisible, setPasswordConfirmedIsVisible] =
+		useState(false);
 	const [emailIsValid, setEmailIsValid] = useState(false);
-	const providers = ['facebook', 'github', 'google', 'twitter'];
 
-	const login = async () => {
+	const register = async () => {
+		// test register call API  <3
+		return;
 		if (emailIsValid) {
 			try {
-				await dispatch(signIn({ identifier, password }));
+				await dispatch(signUp({ identifier, password, username }));
 				console.log(store.getState().authReducer);
 				navigate('/');
 			} catch (error) {
@@ -42,27 +45,18 @@ const LoginContent: React.FunctionComponent<LoginContentPageProps> = (
 			}
 		}
 	};
-	const showPassword = () => {
-		setPasswordIsVisible(!passwordIsVisible);
-	};
+
 	const checkEmail = () => {
 		auth.validEmail(identifier)
 			? setEmailIsValid(true)
 			: setEmailIsValid(false);
 	};
-
-	useEffect(() => {
-		if (errorMessage) {
-			setTimeout(() => {
-				setErrorMessage(false);
-			}, 2000);
-		}
-		checkEmail();
-	}, [errorMessage]);
-
 	useEffect(() => {
 		checkEmail();
 	}, [identifier]);
+	useEffect(() => {
+		setPasswordIsIdentical(password === passwordConfirmed);
+	}, [password, passwordConfirmed]);
 
 	return (
 		<>
@@ -82,16 +76,22 @@ const LoginContent: React.FunctionComponent<LoginContentPageProps> = (
 					<></>
 				)}
 
-				{providers.map((provider) => (
-					<SocialLink provider={provider} key={provider} />
-				))}
-
-				<span className="spanDivider">or</span>
-
 				<div className="LoginForm">
 					<FormControl variant="standard">
+						<InputLabel htmlFor="username">Name</InputLabel>
+						<Input
+							id="username_input_id"
+							type="text"
+							name="username"
+							value={username}
+							onChange={(e) => {
+								setUsername(e.target.value);
+							}}
+						/>
+					</FormControl>
+					<FormControl variant="standard">
 						<InputLabel error={!emailIsValid} htmlFor="email">
-							Utilisateur
+							Email
 						</InputLabel>
 						<Input
 							error={!emailIsValid}
@@ -99,9 +99,9 @@ const LoginContent: React.FunctionComponent<LoginContentPageProps> = (
 							type="email"
 							name="email"
 							value={identifier}
-							autoComplete="off"
 							onChange={(e) => {
 								setIdentifier(e.target.value);
+								checkEmail();
 							}}
 						/>
 					</FormControl>
@@ -113,6 +113,7 @@ const LoginContent: React.FunctionComponent<LoginContentPageProps> = (
 							id="password_input_id"
 							type={passwordIsVisible ? 'text' : 'password'}
 							value={password}
+							error={!passwordIsIdentical}
 							onChange={(e) => {
 								setPassword(e.target.value);
 							}}
@@ -120,9 +121,47 @@ const LoginContent: React.FunctionComponent<LoginContentPageProps> = (
 								<InputAdornment position="end">
 									<IconButton
 										aria-label="toggle password visibility"
-										onClick={showPassword}
+										onClick={() => {
+											setPasswordIsVisible(
+												!passwordIsVisible
+											);
+										}}
 									>
 										{passwordIsVisible ? (
+											<VisibilityOff />
+										) : (
+											<Visibility />
+										)}
+									</IconButton>
+								</InputAdornment>
+							}
+						/>
+					</FormControl>
+					<FormControl variant="standard">
+						<InputLabel htmlFor="standard-adornment-password">
+							Confirm Password
+						</InputLabel>
+						<Input
+							id="password_input_id"
+							error={!passwordIsIdentical}
+							type={
+								passwordConfirmedIsVisible ? 'text' : 'password'
+							}
+							value={passwordConfirmed}
+							onChange={(e) => {
+								setPasswordConfirmed(e.target.value);
+							}}
+							endAdornment={
+								<InputAdornment position="end">
+									<IconButton
+										aria-label="toggle password visibility"
+										onClick={() => {
+											setPasswordConfirmedIsVisible(
+												!passwordConfirmedIsVisible
+											);
+										}}
+									>
+										{passwordConfirmedIsVisible ? (
 											<VisibilityOff />
 										) : (
 											<Visibility />
@@ -140,21 +179,19 @@ const LoginContent: React.FunctionComponent<LoginContentPageProps> = (
 						/>
 					</div>
 					<button
-						disabled={!emailIsValid}
 						className="btn primary"
 						onClick={(e) => {
 							e.preventDefault();
-							login();
+							register();
 						}}
 					>
 						Sign in
 					</button>
 					<hr className="endDivider" />
-					<a href="/register">Forgot Password or register</a>
+					<a href="/login">I already have an account</a>
 				</div>
 			</Box>
 		</>
 	);
 };
-
-export default LoginContent;
+export default RegisterContent;

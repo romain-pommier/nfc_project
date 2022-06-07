@@ -10,7 +10,7 @@ export default function reducer(state = {}, actions: any) {
 			return currentUser;
 		case types.AUTH_SIGN_IN_FAILURE:
 			console.log('failure');
-			break;
+			return null;
 		default:
 			return state;
 	}
